@@ -1,4 +1,4 @@
-<h2 align="center">Hi 👋! I'm SA7, a delusional developer, a knight hacker</h2>
+<h2 align="center">Hi 👋! I'm SA7<br>A delusional developer, A knight hacker</h2>
 
 ###
 
