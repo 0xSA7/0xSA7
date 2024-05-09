@@ -1,4 +1,4 @@
-<h2 align="center">Hi 👋! My name is SA7 and I'm a cyber developer,</h2>
+<h2 align="center">Hi 👋! My name is SA7 and I'm a cyber developer</h2>
 
 ###
 
