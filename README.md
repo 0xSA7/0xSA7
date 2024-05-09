@@ -1,4 +1,4 @@
-<h2 align="center">Hi 👋! My name is SA7 and I'm a cyber developer,</h2>
+<h2 align="center">Hi 👋! I'm SA7, a delusional developer, a knight hacker</h2>
 
 ###
 
@@ -29,11 +29,5 @@
     <img src="https://img.shields.io/static/v1?message=Discord&logo=discord&label=0xSA7&color=#0000FF&logoColor=navy&labelColor=#0000FF&style=for-the-badge" height="35" alt="discord logo"  />
   </a>
 </div>
-
-###
-
-<br clear="both">
-
-<img src="https://raw.githubusercontent.com/0xSA7/0xSA7/output/snake.svg" alt="Snake animation" />
 
 ###
