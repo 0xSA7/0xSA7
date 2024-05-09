@@ -1,4 +1,4 @@
-<h2 align="center">Hi 👋! My name is SA7 and I'm a cyber developer,</h2>
+<h2 align="center">Hi 👋! I'm SA7, a delusional developer, a knight hacker</h2>
 
 ###
 
@@ -27,11 +27,5 @@
 <div align="left">
   </a>
 </div>
-
-###
-
-<br clear="both">
-
-<img src="https://raw.githubusercontent.com/0xSA7/0xSA7/output/snake.svg" alt="Snake animation" />
 
 ###
