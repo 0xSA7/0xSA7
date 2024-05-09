@@ -1,16 +1,39 @@
-### Hi there 👋
+<h2 align="center">Hi 👋! My name is SA7 and I'm a cyber developer,</h2>
 
-<!--
-**0xSA7/0xSA7** is a ✨ _special_ ✨ repository because its `README.md` (this file) appears on your GitHub profile.
+###
 
-Here are some ideas to get you started:
+<br clear="both">
 
-- 🔭 I’m currently working on ...
-- 🌱 I’m currently learning ...
-- 👯 I’m looking to collaborate on ...
-- 🤔 I’m looking for help with ...
-- 💬 Ask me about ...
-- 📫 How to reach me: ...
-- 😄 Pronouns: ...
-- ⚡ Fun fact: ...
--->
+<div align="center">
+  <img src="https://github-readme-stats.vercel.app/api/top-langs?username=0xSA7&locale=en&hide_title=true&layout=compact&card_width=320&langs_count=10&theme=dracula&hide_border=true" height="150" alt="languages graph"  />
+</div>
+
+###
+
+<div align="left">
+  <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/matlab/matlab-original.svg" height="30" alt="matlab logo"  />
+  <img width="12" />
+  <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/java/java-original.svg" height="30" alt="java logo"  />
+</div>
+
+###
+
+<br clear="both">
+
+<img align="right" height="132" src="https://i-download.imgflip.com/8phdcz.gif"  />
+
+###
+
+<div align="left">
+  <a href="discordapp.com/users/726491446894657549" target="_blank">
+    <img src="https://img.shields.io/static/v1?message=Discord&logo=discord&label=0xSA7&color=#0000FF&logoColor=navy&labelColor=#0000FF&style=for-the-badge" height="35" alt="discord logo"  />
+  </a>
+</div>
+
+###
+
+<br clear="both">
+
+<img src="https://raw.githubusercontent.com/0xSA7/0xSA7/output/snake.svg" alt="Snake animation" />
+
+###
