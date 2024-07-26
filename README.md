@@ -36,9 +36,6 @@
   <a href="https://discordapp.com/users/726491446894657549" target="_blank">
     <img src="https://raw.githubusercontent.com/maurodesouza/profile-readme-generator/master/src/assets/icons/social/discord/default.svg" width="47" height="35" alt="discord logo"  />
   </a>
-  <a href="salehdiaaahmed@gmail.com" target="_blank">
-    <img src="https://raw.githubusercontent.com/maurodesouza/profile-readme-generator/master/src/assets/icons/social/gmail/default.svg" width="47" height="35" alt="gmail logo"  />
-  </a>
   <a href="https://www.linkedin.com/in/saleh-diaa-ahmed-4213b6223/" target="_blank">
     <img src="https://raw.githubusercontent.com/maurodesouza/profile-readme-generator/master/src/assets/icons/social/linkedin/default.svg" width="47" height="35" alt="linkedin logo"  />
   </a>
