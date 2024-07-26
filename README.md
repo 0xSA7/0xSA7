@@ -34,9 +34,6 @@
 
 <div align="center">
   </a>
-  <a href="salehdiaaahmed@gmail.com" target="_blank">
-    <img src="https://raw.githubusercontent.com/maurodesouza/profile-readme-generator/master/src/assets/icons/social/gmail/default.svg" width="47" height="35" alt="gmail logo"  />
-  </a>
   </a>
 </div>
 
