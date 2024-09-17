@@ -1,6 +1,6 @@
 <br clear="both">
 
-<h2 align="center">Hi 👋! I'm SA7<br>A delusional developer, a knight hacker</h2>
+<h2 align="center"> I'm SA7<br> a Delusional Developer, a Knight Hacker</h2>
 
 ###
 
