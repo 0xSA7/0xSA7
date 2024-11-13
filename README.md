@@ -7,7 +7,7 @@
 <br clear="both">
 
 <div align="center">
-  <img src="https://github-readme-stats.vercel.app/api/top-langs?username=0xSA7&locale=en&hide_title=false&layout=compact&card_width=320&langs_count=12&theme=dracula&hide_border=true" height="231" alt="languages graph"  />
+  <iframe src="https://tryhackme.com/api/v2/badges/public-profile?userPublicId=2496648" style='border:none;'></iframe>
 </div>
 
 ###
