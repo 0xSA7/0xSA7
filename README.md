@@ -17,10 +17,6 @@
       style="border-radius: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.25);"
     />
   </div>
-<br>
-<br>
-<br>
-<br>
 </div><div style="display: flex; align-items: center; gap: 30px;">
 
   <div style="flex: 1;">
