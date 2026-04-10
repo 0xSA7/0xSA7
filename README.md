@@ -5,7 +5,7 @@
 <br clear="both">
 
 <div align="center">
-  <img src="https://github-readme-stats.vercel.app/api/top-langs?username=0xSA7&locale=en&hide_title=true&layout=compact&card_width=320&langs_count=25&theme=dracula&hide_border=true" height="300" alt="languages graph"  />
+  <img src="metrics.plugin.languages.svg" height="300" alt="Languages Activity" />
 </div>
 
 ###
