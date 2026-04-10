@@ -1,15 +1,14 @@
 name: Metrics
 on:
-  # Schedule updates every 24 hours
   schedule: [{cron: "0 0 * * *"}]
-  # Allow manual workflow triggers
   workflow_dispatch:
-  # Trigger on push to the main branch
   push: {branches: ["master", "main"]}
 
 jobs:
   github-metrics:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
     steps:
       - uses: lowlighter/metrics@latest
         with:
@@ -17,13 +16,8 @@ jobs:
           token: ${{ secrets.METRICS_TOKEN }}
           base: ""
           plugin_languages: yes
-          # Enable indepth mode for accurate commit-level analysis
           plugin_languages_indepth: yes
-          # Show byte size and percentage details
           plugin_languages_details: bytes-size, percentage
-          # Ignore build scripts, markup, and docs to focus on core logic
           plugin_languages_ignored: html, css, tex, less, dockerfile, makefile, qmake, lex, cmake, shell, gnuplot
-          # Show top 8 languages
           plugin_languages_limit: 8
-          # Group everything else into "Other"
           plugin_languages_other: yes
