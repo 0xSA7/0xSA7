@@ -20,15 +20,14 @@ jobs:
           plugin_languages_details: bytes-size, percentage
           plugin_languages_categories: programming
           plugin_languages_ignored: >
-            html, css, tex, less,
-            dockerfile, makefile, qmake, cmake,
-            shell, bash, powershell, batchfile,
-            gnuplot,
-            json, yaml, toml, ini,
-            markdown, rst, asciidoc,
-            xml,
             systemverilog,
-            gitignore, gitattributes,
-            properties, config
+            markdown,
+            json,
+            yaml,
+            toml,
+            html,
+            xml,
+            css,
+            tex
           plugin_languages_limit: 10
           plugin_languages_other: no
