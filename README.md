@@ -5,10 +5,7 @@
 </div>
 
 <br>
-
-<img src="./levi_ackerman.jpg" align="right" width="400" height="200" alt="Levi Ackerman" />
-
-<div align="left">
+<div align="center">
   <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/linux/linux-original.svg" height="50" alt="linux logo" />&nbsp;&nbsp;&nbsp;
   <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/c/c-original.svg" height="50" alt="c logo" />&nbsp;&nbsp;&nbsp;
   <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/cplusplus/cplusplus-original.svg" height="50" alt="c++ logo" />&nbsp;&nbsp;&nbsp;
