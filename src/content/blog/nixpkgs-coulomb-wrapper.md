@@ -1,10 +1,10 @@
 ---
-title: "From a bug fix to package co-maintainer in nixpkgs: Coulomb case study"
+title: "From a bug fix to package co-maintainer in nixpkgs: the Coulomb case study"
 description: "How fixing a phase-ordering bug in Coulomb's Nix derivation led to becoming co-maintainer of the package, and how wrapGAppsHook4 builds its wrappers."
 pubDate: 2026-06-13
 tags: ["open-source", "nixos", "nixpkgs", "gtk", "maintainer"]
 draft: false
-readTime: "7 min read"
+readTime: "6 min read"
 pr: "https://github.com/NixOS/nixpkgs/pull/526664"
 ---
 
@@ -158,11 +158,9 @@ dependent PRs, and notified when their package breaks Hydra, the
 Nixpkgs CI. A package without one tends to rot until someone trips
 over it.
 
-I was in a good position to help. I had just landed
-[PR #531416](https://github.com/NixOS/nixpkgs/pull/531416), which
-registered my `githubId` in `maintainers/maintainer-list.nix`, and I
-was about to ship a non-trivial fix to a package with a single
-maintainer. So I added a second commit:
+So I bundled two changes into the same PR: the Coulomb fix, and my own
+maintainer entry in `maintainers/maintainer-list.nix`. The derivation
+then listed me as a co-maintainer:
 
 ```nix
 # pkgs/by-name/co/coulomb/package.nix
@@ -182,9 +180,17 @@ issue against the package, GitHub pings me. If a dependency update
 breaks the build, Hydra notifies me. If I want to push a follow-up fix,
 I don't have to wait for someone else to review it cold.
 
-This is the part of the contribution I'm proudest of, more than the fix
-itself. Someone fixes a bug when they trip over it. A maintainer entry
-means someone is responsible for the next one too.
+I did this in the wrong order. The contributing guide suggests
+registering yourself first, in a separate PR, before any package PR
+that lists you as a maintainer. I did both at once, and I typed the
+wrong `githubId`, so I had to open a follow-up,
+[PR #531416](https://github.com/NixOS/nixpkgs/pull/531416), to correct
+it. I wrote up what I learned in a separate
+[meta post](/0xSA7/blog/nixpkgs-meta/).
+
+Even so, this is the part of the contribution I'm proudest of, more
+than the fix itself. Someone fixes a bug when they trip over it. A
+maintainer entry means someone is responsible for the next one too.
 
 ## What I took from it
 

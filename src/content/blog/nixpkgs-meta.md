@@ -9,9 +9,9 @@ readTime: "7 min read"
 
 This is a meta-post. The previous posts on this blog walked through
 individual contributions in detail: the
-[Coulomb wrapper fix](/0xSA7/blog/fixing-wrapper-generation-nixpkgs-coulomb/),
-the [Multipass resource minima](/0xSA7/blog/unifying-vm-resource-minima-multipass/),
-and the [dotfiles setup](/0xSA7/blog/nixos-dotfiles-raad-modular-secure-portable/).
+[Coulomb wrapper fix](/0xSA7/blog/nixpkgs-coulomb-wrapper/),
+the [Multipass resource minima](/0xSA7/blog/multipass-vm-minima/),
+and the [dotfiles setup](/0xSA7/blog/dotfiles-raad/).
 This one steps back and looks at the contribution process itself.
 
 In June 2026 I opened six pull requests against
@@ -38,7 +38,7 @@ I'll go through them one by one.
 
 ## PR 526664: Coulomb, the actual fix
 
-I wrote a [full technical post](/0xSA7/blog/fixing-wrapper-generation-nixpkgs-coulomb/)
+I wrote a [full technical post](/0xSA7/blog/nixpkgs-coulomb-wrapper/)
 about this one. Coulomb, a GTK4 circuit simulator, launched but its
 icons were missing. The root cause was a phase-ordering bug:
 `makeWrapper` ran in `installPhase`, before `wrapGAppsHook4` had

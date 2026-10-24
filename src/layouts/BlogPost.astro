@@ -10,7 +10,7 @@ const { frontmatter } = Astro.props;
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>{frontmatter.title} — 0xSA7</title>
-npm run build
+
   <!-- Apply theme before paint -->
   <script is:inline>
     (function() {
@@ -21,7 +21,7 @@ npm run build
     })();
   </script>
 
-  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  <link rel="icon" type="image/svg+xml" href="/0xSA7/favicon.svg" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
@@ -31,7 +31,8 @@ npm run build
 
     <header class="site-header">
       <div>
-        <a href="/0xSA7/" class="back-link">← back</a>
+        <!-- Fix 1: history.back() instead of link to homepage -->
+        <a href="#" class="back-link" id="back-link">← back</a>
       </div>
       <button
         class="theme-toggle"
@@ -49,22 +50,19 @@ npm run build
         {frontmatter.readTime && <span class="blog-readtime">{frontmatter.readTime}</span>}
         {frontmatter.tags && frontmatter.tags.map(t => <span class="blog-tag">{t}</span>)}
       </p>
-      {(frontmatter.pr || frontmatter.repo) && (
+      {frontmatter.pr && (
         <p class="blog-source">
-          source:{" "}
-          {frontmatter.pr && (
-            <a href={frontmatter.pr} target="_blank" rel="noopener noreferrer">
-              PR on GitHub ↗
-            </a>
-          )}
-          {frontmatter.repo && (
-            <a href={frontmatter.repo} target="_blank" rel="noopener noreferrer">
-              repo on GitHub ↗
-            </a>
-          )}
+          source: <a href={frontmatter.pr} target="_blank" rel="noopener noreferrer">PR on GitHub ↗</a>
         </p>
       )}
-      <div class="blog-content">
+      {frontmatter.repo && (
+        <p class="blog-source">
+          source: <a href={frontmatter.repo} target="_blank" rel="noopener noreferrer">repo on GitHub ↗</a>
+        </p>
+      )}
+
+      <!-- Fix 2: blog-content wrapper with typography for prose -->
+      <div class="blog-content prose">
         <slot />
       </div>
     </article>
@@ -84,6 +82,17 @@ npm run build
         root.setAttribute('data-theme', next);
         localStorage.setItem('theme', next);
         toggle.textContent = next === 'dark' ? '☀' : '☾';
+      });
+
+      // Fix 1: history.back() with fallback
+      const backLink = document.getElementById('back-link');
+      backLink.addEventListener('click', (e) => {
+        e.preventDefault();
+        if (window.history.length > 1) {
+          window.history.back();
+        } else {
+          window.location.href = '/0xSA7/';
+        }
       });
     })();
   </script>
