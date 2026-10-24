@@ -1,7 +1,7 @@
 ---
 title: "My NixOS dotfiles: modular config, secure boot, and a portable home-manager"
 description: "How I structure my NixOS dotfiles for the laptop raad: dual-channel flakes, lanzaboote secure boot, kernel hardening, and a home-manager setup I reuse on Ubuntu."
-pubDate: 2026-07-19
+pubDate: 2026-07-26
 tags: ["nixos", "dotfiles", "security", "linux"]
 draft: false
 readTime: "10 min read"
