@@ -11,6 +11,7 @@ const blog = defineCollection({
     draft: z.boolean().default(false),
     readTime: z.string().optional(),
     pr: z.string().url().optional(),
+    repo: z.string().url().optional(),
   }),
 });
 

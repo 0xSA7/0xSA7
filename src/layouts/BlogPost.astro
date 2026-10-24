@@ -49,9 +49,19 @@ npm run build
         {frontmatter.readTime && <span class="blog-readtime">{frontmatter.readTime}</span>}
         {frontmatter.tags && frontmatter.tags.map(t => <span class="blog-tag">{t}</span>)}
       </p>
-      {frontmatter.pr && (
+      {(frontmatter.pr || frontmatter.repo) && (
         <p class="blog-source">
-          source: <a href={frontmatter.pr} target="_blank" rel="noopener noreferrer">PR on GitHub ↗</a>
+          source:{" "}
+          {frontmatter.pr && (
+            <a href={frontmatter.pr} target="_blank" rel="noopener noreferrer">
+              PR on GitHub ↗
+            </a>
+          )}
+          {frontmatter.repo && (
+            <a href={frontmatter.repo} target="_blank" rel="noopener noreferrer">
+              repo on GitHub ↗
+            </a>
+          )}
         </p>
       )}
       <div class="blog-content">
