@@ -1,0 +1,86 @@
+---
+import { getCollection } from 'astro:content';
+import '../styles/global.css';
+
+const posts = (await getCollection('blog', ({ data }) => !data.draft))
+  .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
+---
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>blog — 0xSA7</title>
+
+  <script is:inline>
+    (function() {
+      const saved = localStorage.getItem('theme');
+      const osDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+      const theme = saved || (osDark ? 'dark' : 'light');
+      document.documentElement.setAttribute('data-theme', theme);
+    })();
+  </script>
+
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+</head>
+<body>
+  <main>
+
+    <header class="site-header">
+      <div>
+        <a href="/0xSA7/" class="back-link">← back</a>
+      </div>
+      <button
+        class="theme-toggle"
+        id="theme-toggle"
+        aria-label="Toggle theme"
+      >
+        ☾
+      </button>
+    </header>
+
+    <section class="block">
+      <h2 class="block-title">blog</h2>
+      <ul class="list">
+        {posts.length === 0 ? (
+          <li>
+            <span>no posts yet</span>
+            <span class="meta">—</span>
+          </li>
+        ) : (
+          posts.map(p => (
+            <li>
+              <a href={`/0xSA7/blog/${p.id}/`}>
+                <span>{p.data.title}</span>
+                <span class="meta">{p.data.pubDate.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' })}</span>
+              </a>
+            </li>
+          ))
+        )}
+      </ul>
+    </section>
+
+  </main>
+
+  <script is:inline>
+    (function() {
+      const root = document.documentElement;
+      const toggle = document.getElementById('theme-toggle');
+      const current = root.getAttribute('data-theme');
+      toggle.textContent = current === 'dark' ? '☀' : '☾';
+
+      toggle.addEventListener('click', () => {
+        const now = root.getAttribute('data-theme');
+        const next = now === 'dark' ? 'light' : 'dark';
+        root.setAttribute('data-theme', next);
+        localStorage.setItem('theme', next);
+        toggle.textContent = next === 'dark' ? '☀' : '☾';
+      });
+    })();
+  </script>
+</body>
+</html>
