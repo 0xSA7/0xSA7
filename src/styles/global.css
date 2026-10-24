@@ -268,3 +268,23 @@ main {
   border-top: 1px solid var(--line);
   margin: 2.5rem 0;
 }
+
+.blog-readtime {
+  color: var(--muted);
+  font-size: 0.7rem;
+  margin-left: 0.5rem;
+}
+
+.blog-readtime::before { content: '· '; }
+
+.blog-source {
+  margin: -2rem 0 2rem;
+  font-size: 0.75rem;
+  color: var(--muted);
+}
+
+.blog-source a {
+  color: var(--accent);
+  text-decoration: none;
+  border-bottom: 1px dashed var(--accent);
+}
