@@ -305,11 +305,11 @@ anything that touches `/etc`, I'm back on apt and `systemctl edit`.
 
 The repo has an auto-commit entry dated 2026-06-27, pushed by a small
 shell utility I wrote called
-[auto-git](https://github.com/0xSA7/auto-git). It stages and commits
-dotfiles on a schedule so I don't lose changes between real commits.
-I'll write about it separately. The short version: every dotfiles repo
-should have something like it, because otherwise you find out three
-weeks later that the alias you added never made it to git.
+[auto-git](https://github.com/0xSA7/auto-git).It stages and commits dotfiles on a schedule so I do not lose changes
+between real commits. I have written about it separately, but the
+short version is: every dotfiles repo should have one, because the
+alternative is finding out three weeks later that the alias you added
+never made it to git.
 
 ## What I took from it
 
