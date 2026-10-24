@@ -4,7 +4,7 @@ description: "How fixing a phase-ordering bug in Coulomb's Nix derivation led to
 pubDate: 2026-06-13
 tags: ["open-source", "nixos", "nixpkgs", "gtk", "maintainer"]
 draft: false
-readTime: "5 min read"
+readTime: "7 min read"
 pr: "https://github.com/NixOS/nixpkgs/pull/526664"
 ---
 
