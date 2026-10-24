@@ -288,3 +288,159 @@ main {
   text-decoration: none;
   border-bottom: 1px dashed var(--accent);
 }
+/* ========== Blog post prose styles ========== */
+.blog-content {
+  margin-top: 3rem;
+}
+
+/* Fix 2: Code block rendering - make sure pre/code don't bleed */
+.blog-content pre {
+  background: var(--bg);
+  border: 1px solid var(--line);
+  padding: 1rem 1.25rem;
+  overflow-x: auto;
+  margin: 1.5rem 0;
+  font-size: 0.8rem;
+  line-height: 1.55;
+  border-radius: 3px;
+  white-space: pre;
+}
+
+.blog-content code {
+  background: var(--bg);
+  border: 1px solid var(--line);
+  padding: 1px 5px;
+  font-size: 0.85em;
+  border-radius: 2px;
+  font-family: 'JetBrains Mono', ui-monospace, monospace;
+}
+
+.blog-content pre code {
+  background: none;
+  border: none;
+  padding: 0;
+  font-size: inherit;
+}
+
+/* Fix 4: Table styling - make cells readable */
+.blog-content table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1.5rem 0;
+  font-size: 0.85rem;
+  display: block;
+  overflow-x: auto;
+}
+
+.blog-content th,
+.blog-content td {
+  padding: 0.6rem 0.9rem;
+  border: 1px solid var(--line);
+  text-align: left;
+  vertical-align: top;
+  white-space: normal;
+  word-break: break-word;
+}
+
+.blog-content th {
+  background: var(--bg);
+  font-weight: 500;
+  color: var(--fg);
+}
+
+.blog-content tr:nth-child(even) td {
+  background: var(--bg);
+}
+
+/* Mobile: tables scroll horizontally */
+@media (max-width: 600px) {
+  .blog-content table {
+    font-size: 0.75rem;
+  }
+  .blog-content th,
+  .blog-content td {
+    padding: 0.5rem 0.6rem;
+  }
+}
+
+/* Other prose elements */
+.blog-content h1 {
+  font-size: 1.4rem;
+  font-weight: 500;
+  letter-spacing: -0.02em;
+  margin-bottom: 0.75rem;
+}
+
+.blog-content h2 {
+  font-size: 1.15rem;
+  font-weight: 500;
+  margin-top: 2.5rem;
+  margin-bottom: 1rem;
+}
+
+.blog-content h3 {
+  font-size: 1rem;
+  font-weight: 500;
+  margin-top: 2rem;
+  margin-bottom: 0.75rem;
+}
+
+.blog-content p {
+  margin-bottom: 1.25rem;
+  line-height: 1.7;
+}
+
+.blog-content ul,
+.blog-content ol {
+  margin: 1rem 0 1.25rem 1.5rem;
+}
+
+.blog-content ul {
+  list-style: none;
+}
+
+.blog-content ul li::before {
+  content: '—';
+  color: var(--muted);
+  margin-right: 0.5rem;
+  margin-left: -1rem;
+}
+
+.blog-content ol {
+  list-style: decimal;
+}
+
+.blog-content a {
+  color: var(--accent);
+  text-decoration: none;
+  border-bottom: 1px dashed var(--accent);
+}
+
+.blog-content a:hover {
+  border-bottom-style: solid;
+}
+
+.blog-content blockquote {
+  border-left: 2px solid var(--accent);
+  padding-left: 1rem;
+  color: var(--muted);
+  margin: 1.5rem 0;
+  font-style: italic;
+}
+
+.blog-content hr {
+  border: none;
+  border-top: 1px solid var(--line);
+  margin: 2.5rem 0;
+}
+
+/* Fix 2: Make sure inline code inside headings doesn't get styling */
+.blog-content h1 code,
+.blog-content h2 code,
+.blog-content h3 code {
+  background: var(--bg);
+  border: 1px solid var(--line);
+  padding: 1px 5px;
+  font-size: 0.85em;
+  border-radius: 2px;
+}
