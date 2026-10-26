@@ -2,6 +2,9 @@
 import '../styles/global.css';
 
 const { frontmatter } = Astro.props;
+const siteName = '0xSA7';
+const pageUrl = Astro.url.href;
+const description = frontmatter.description || 'Saleh Diaa Ahmed - Software Security Engineer';
 ---
 
 <!DOCTYPE html>
@@ -9,7 +12,22 @@ const { frontmatter } = Astro.props;
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>{frontmatter.title} — 0xSA7</title>
+  <title>{frontmatter.title} — {siteName}</title>
+  <meta name="description" content={description} />
+
+  <!-- Open Graph / Facebook -->
+  <meta property="og:type" content="article" />
+  <meta property="og:url" content={pageUrl} />
+  <meta property="og:title" content={`${frontmatter.title} — ${siteName}`} />
+  <meta property="og:description" content={description} />
+  <meta property="og:site_name" content={siteName} />
+  <meta property="og:image" content="/0xSA7/icon.png" />
+
+  <!-- Twitter -->
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content={`${frontmatter.title} — ${siteName}`} />
+  <meta name="twitter:description" content={description} />
+  <meta name="twitter:image" content="/0xSA7/icon.png" />
 
   <!-- Apply theme before paint -->
   <script is:inline>
@@ -21,7 +39,7 @@ const { frontmatter } = Astro.props;
     })();
   </script>
 
-  <link rel="icon" type="image/svg+xml" href="/0xSA7/favicon.svg" />
+  <link rel="icon" type="image/png" href="/0xSA7/icon.png" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
@@ -31,7 +49,6 @@ const { frontmatter } = Astro.props;
 
     <header class="site-header">
       <div>
-        <!-- Fix 1: history.back() instead of link to homepage -->
         <a href="#" class="back-link" id="back-link">← back</a>
       </div>
       <button
@@ -61,7 +78,6 @@ const { frontmatter } = Astro.props;
         </p>
       )}
 
-      <!-- Fix 2: blog-content wrapper with typography for prose -->
       <div class="blog-content prose">
         <slot />
       </div>
@@ -84,7 +100,6 @@ const { frontmatter } = Astro.props;
         toggle.textContent = next === 'dark' ? '☀' : '☾';
       });
 
-      // Fix 1: history.back() with fallback
       const backLink = document.getElementById('back-link');
       backLink.addEventListener('click', (e) => {
         e.preventDefault();
