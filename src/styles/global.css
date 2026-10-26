@@ -1,4 +1,4 @@
-/* ========== Kanagawa Light (Lotus) — Default ========== */
+/* ========== Kanagawa Light (Lotus) @ Default ========== */
 :root {
   --bg: #DCDCDC;
   --bg-soft: #F2F2F2;
@@ -213,7 +213,7 @@ main {
 
 .blog-content ul { list-style: none; }
 .blog-content ul li::before {
-  content: '—';
+  content: '@';
   color: var(--muted);
   margin-right: 0.5rem;
 }
@@ -400,7 +400,7 @@ main {
 }
 
 .blog-content ul li::before {
-  content: '—';
+  content: '@';
   color: var(--muted);
   margin-right: 0.5rem;
   margin-left: -1rem;
@@ -443,4 +443,93 @@ main {
   padding: 1px 5px;
   font-size: 0.85em;
   border-radius: 2px;
+}
+
+/* ========== Mobile fixes (375px and below) ========== */
+@media (max-width: 600px) {
+  /* Site header on mobile */
+  .site-header {
+    margin-bottom: 3rem;
+    flex-direction: column;
+    gap: 0.75rem;
+    align-items: flex-start;
+  }
+
+  /* List items stack vertically */
+  .list a {
+    flex-direction: column;
+    gap: 0.15rem;
+    padding: 0.95rem 0;
+  }
+
+  .list .meta {
+    text-align: left;
+    font-size: 0.75rem;
+  }
+
+  /* Tables scroll horizontally on mobile */
+  .blog-content table {
+    display: block;
+    overflow-x: auto;
+    white-space: nowrap;
+    font-size: 0.75rem;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .blog-content th,
+  .blog-content td {
+    padding: 0.5rem 0.6rem;
+    white-space: normal;
+    word-break: break-word;
+  }
+
+  /* Code blocks scroll horizontally */
+  .blog-content pre {
+    font-size: 0.72rem;
+    padding: 0.75rem 1rem;
+  }
+
+  /* Smaller heading sizes */
+  .blog-content h2 {
+    font-size: 1.05rem;
+  }
+
+  .blog-content h3 {
+    font-size: 0.95rem;
+  }
+
+  /* Reduce padding on the page */
+  main {
+    padding: 4rem 1.25rem 3rem;
+  }
+
+  /* Site header h1 smaller */
+  .site-header h1 {
+    font-size: 1.2rem;
+  }
+
+  /* Footer */
+  .site-footer {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+}
+
+/* Even smaller screens (375px and below) */
+@media (max-width: 375px) {
+  body {
+    font-size: 13px;
+  }
+
+  main {
+    padding: 3rem 1rem 2.5rem;
+  }
+
+  .site-header h1 {
+    font-size: 1.1rem;
+  }
+
+  .blog-content pre {
+    font-size: 0.68rem;
+  }
 }

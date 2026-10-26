@@ -1,5 +1,6 @@
 # build output
 dist/
+
 # generated types
 .astro/
 
@@ -12,13 +13,24 @@ yarn-debug.log*
 yarn-error.log*
 pnpm-debug.log*
 
-
 # environment variables
 .env
 .env.production
+.env.local
 
 # macOS-specific files
 .DS_Store
 
 # jetbrains setting folder
 .idea/
+
+# VS Code settings (optional - remove this line if you want to commit them)
+.vscode/
+
+# swap files
+*.swp
+*.swo
+*~
+
+# OS files
+Thumbs.db

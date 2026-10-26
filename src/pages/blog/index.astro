@@ -11,8 +11,24 @@ const posts = (await getCollection('blog', ({ data }) => !data.draft))
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>blog@0xSA7</title>
+  <title>blog @ 0xSA7</title>
+  <meta name="description" content="Writing on security engineering, open source, and low-level systems." />
 
+  <!-- Open Graph -->
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://0xsa7.github.io/0xSA7/blog/" />
+  <meta property="og:title" content="blog @ 0xSA7" />
+  <meta property="og:description" content="Writing on security engineering, open source, and low-level systems." />
+  <meta property="og:site_name" content="0xSA7" />
+  <meta property="og:image" content="/0xSA7/icon.png" />
+
+  <!-- Twitter -->
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="blog @ 0xSA7" />
+  <meta name="twitter:description" content="Writing on security engineering, open source, and low-level systems." />
+  <meta name="twitter:image" content="/0xSA7/icon.png" />
+
+  <!-- Apply theme before paint -->
   <script is:inline>
     (function() {
       const saved = localStorage.getItem('theme');
@@ -22,7 +38,7 @@ const posts = (await getCollection('blog', ({ data }) => !data.draft))
     })();
   </script>
 
-  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  <link rel="icon" type="image/png" href="/0xSA7/icon.png" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
@@ -49,7 +65,7 @@ const posts = (await getCollection('blog', ({ data }) => !data.draft))
         {posts.length === 0 ? (
           <li>
             <span>no posts yet</span>
-            <span class="meta">—</span>
+            <span class="meta">@</span>
           </li>
         ) : (
           posts.map(p => (
