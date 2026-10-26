@@ -38,7 +38,7 @@ npm run preview
 
 ```
 public/
-├── icon.png                 # Favicon / OG image
+├── favicon.svg                 # Favicon / OG image
 └── scripts/
 src/
 ├── content/
