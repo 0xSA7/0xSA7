@@ -1,7 +1,9 @@
 ---
 import '../styles/global.css';
+import { getCollection } from 'astro:content';
 
-const projects = [
+// Selected work: top 3 (1 project + 2 OSS PRs)
+const selected = [
   {
     name: 'WatchZork',
     meta: 'KMDF kernel monitoring',
@@ -9,10 +11,10 @@ const projects = [
     blog: null,
   },
   {
-  name: 'multipass: VM resource minima',
-  meta: '#5057',
-  url: 'https://github.com/canonical/multipass/pull/5057',
-  blog: '/0xSA7/blog/multipass-vm-minima/',
+    name: 'multipass: VM resource minima',
+    meta: '#5057',
+    url: 'https://github.com/canonical/multipass/pull/5057',
+    blog: '/0xSA7/blog/multipass-vm-minima/',
   },
   {
     name: 'nixpkgs: Coulomb wrapper + co-maintainer',
@@ -21,6 +23,16 @@ const projects = [
     blog: '/0xSA7/blog/nixpkgs-coulomb-wrapper/',
   },
 ];
+
+// Fetch recent posts dynamically (top 3 latest)
+const recentPosts = (await getCollection('blog', ({ data }) => !data.draft))
+  .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf())
+  .slice(0, 3)
+  .map(p => ({
+    name: p.data.title,
+    meta: p.data.pubDate.toLocaleDateString('en-US', { month: 'short', day: 'numeric' }),
+    url: `/0xSA7/blog/${p.id}/`,
+  }));
 ---
 
 <!DOCTYPE html>
@@ -29,21 +41,21 @@ const projects = [
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>0xSA7 @ Saleh Diaa Ahmed</title>
-  <meta name="description" content="Saleh Diaa Ahmed - Software Security Engineer. Open source contributor, kernel engineer, NixOS user." />
+  <meta name="description" content="Saleh Diaa Ahmed. Low-level C++ by day, security research and open source by night." />
   <meta name="author" content="Saleh Diaa Ahmed" />
 
   <!-- Open Graph / Facebook -->
   <meta property="og:type" content="website" />
   <meta property="og:url" content="https://0xsa7.github.io/0xSA7/" />
   <meta property="og:title" content="0xSA7 @ Saleh Diaa Ahmed" />
-  <meta property="og:description" content="Software Security Engineer. Open source contributor, kernel engineer, NixOS user." />
+  <meta property="og:description" content="Low-level C++ by day, security research and open source by night." />
   <meta property="og:site_name" content="0xSA7" />
   <meta property="og:image" content="/0xSA7/favicon.svg" />
 
   <!-- Twitter -->
   <meta name="twitter:card" content="summary" />
   <meta name="twitter:title" content="0xSA7 @ Saleh Diaa Ahmed" />
-  <meta name="twitter:description" content="Software Security Engineer. Open source contributor, kernel engineer, NixOS user." />
+  <meta name="twitter:description" content="Low-level C++ by day, security research and open source by night." />
   <meta name="twitter:image" content="/0xSA7/favicon.svg" />
 
   <!-- Apply theme before paint -->
@@ -66,8 +78,8 @@ const projects = [
 
     <header class="site-header">
       <div>
-        <h1>Saleh Diaa Ahmed<span class="handle">[0xSA7]</span></h1>
-        <p class="role">Software Security Engineer | Open-Source Contributor</p>
+        <h1>Saleh Diaa Ahmed <span class="handle">[0xSA7]</span></h1>
+        <p class="role">Software Engineer | Security Researcher | Open-Source Contributor</p>
       </div>
       <button
         class="theme-toggle"
@@ -81,21 +93,14 @@ const projects = [
     <section class="block">
       <h2 class="block-title">whoami</h2>
       <p>
-        Software Security Engineer working on kernel-level monitoring,
-        digital forensics, and hardware root-of-trust. Currently finishing
-        a B.Sc. in Systems &amp; Computer Engineering at Al-Azhar University.
-      </p>
-      <p>
-        Open source contributor to NixOS / nixpkgs and Canonical Multipass.
-        Founder of AZCTF.
-      </p>
+I’m a software engineer who likes working close to the hardware. I write native code, mess around with computer architecture, and enjoy the low-level stuff most people avoid. I care about clean, readable code and not wasting memory or CPU. I also like contributing to open source.      </p>
     </section>
 
     <section class="block">
       <h2 class="block-title">selected work</h2>
       <ul class="list">
-        {projects.map(p => {
-          const href = p.blog ?? p.github ?? '#';
+        {selected.map(p => {
+          const href = p.blog ?? p.github ?? p.url ?? '#';
           const target = href.startsWith('http') ? '_blank' : '_self';
           const rel = target === '_blank' ? 'noopener noreferrer' : undefined;
           return (
@@ -110,12 +115,20 @@ const projects = [
       </ul>
     </section>
 
-    <section class="block">
-      <h2 class="block-title">writing</h2>
+        <section class="block">
+      <h2 class="block-title">recent writing</h2>
       <ul class="list">
+        {recentPosts.map(p => (
+          <li>
+            <a href={p.url}>
+              <span>{p.name}</span>
+              <span class="meta">{p.meta}</span>
+            </a>
+          </li>
+        ))}
         <li>
           <a href="/0xSA7/blog/">
-            <span>blog index</span>
+            <span>full blog index</span>
             <span class="meta">→</span>
           </a>
         </li>
@@ -132,13 +145,13 @@ const projects = [
           </a>
         </li>
         <li>
-          <a href="https://github.com/0xSA7">
+          <a href="https://github.com/0xSA7" target="_blank" rel="noopener noreferrer">
             <span>github</span>
             <span class="meta">@0xSA7</span>
           </a>
         </li>
         <li>
-          <a href="https://linkedin.com/in/salehdiaaahmed">
+          <a href="https://linkedin.com/in/salehdiaaahmed" target="_blank" rel="noopener noreferrer">
             <span>linkedin</span>
             <span class="meta">/salehdiaaahmed</span>
           </a>
@@ -157,8 +170,6 @@ const projects = [
     (function() {
       const root = document.documentElement;
       const toggle = document.getElementById('theme-toggle');
-
-      // Sync icon with the actual current theme (set in <head>)
       const current = root.getAttribute('data-theme');
       toggle.textContent = current === 'dark' ? '☀' : '☾';
 
