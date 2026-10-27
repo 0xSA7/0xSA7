@@ -1,12 +1,25 @@
-/* ========== Kanagawa Light (Lotus) @ Default ========== */
+/* ========== Kanagawa Lotus (Light) — Default ========== */
 :root {
-  --bg: #DCDCDC;
-  --bg-soft: #F2F2F2;
-  --fg: #2D2D2D;
-  --muted: #727169;
-  --line: #C8C8C8;
-  --accent: #6181A0;
-  --accent-2: #77793F;
+  /* Backgrounds — أغمق درجة */
+  --bg: #C8C2A0;          /* main background (darker) */
+  --bg-soft: #E8E0B5;     /* content background (darker) */
+  --bg-elevated: #DBD3A5; /* lighter blocks (darker) */
+
+  /* Foregrounds */
+  --fg: #3A3A4A;          /* default text (darker ink) */
+  --muted: #5C5A50;       /* muted text (darker) */
+  --muted-2: #4A4940;     /* darker muted */
+
+  /* Borders & lines */
+  --line: #B5B090;        /* borders (darker) */
+
+  /* Accents */
+  --accent: #4D699B;      /* lotusBlue4 */
+  --accent-2: #624C83;    /* lotusViolet4 */
+  --accent-3: #6F894E;    /* lotusGreen */
+  --warning: #E98A00;     /* lotusOrange2 */
+  --highlight: #DE9800;   /* lotusYellow3 */
+
   --max-w: 640px;
 }
 
