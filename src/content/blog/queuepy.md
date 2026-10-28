@@ -1,6 +1,6 @@
 ---
 title: "Queuepy: simulating M/M/c/K queuing systems in Python"
-description: "A semester-7 Queuing Theory course project that implements both closed-form solutions and event-driven simulation for M/M/1, M/M/1/K, M/M/c, and M/M/c/K models, with a Tkinter GUI and a validation check that compares the two approaches against each other."
+description: "A semester-6 Queuing Theory course project that implements both closed-form solutions and event-driven simulation for M/M/1, M/M/1/K, M/M/c, and M/M/c/K models, with a Tkinter GUI and a validation check that compares the two approaches against each other."
 pubDate: 2025-02-08
 tags: ["python", "queuing-theory", "simulation", "academic"]
 draft: false
@@ -8,7 +8,7 @@ readTime: "7 min read"
 repo: "https://github.com/0xSA7/Queuepy"
 ---
 
-In semester 7 of my Systems and Computer Engineering program, the
+In semester 6 of my Systems and Computer Engineering program, the
 Queuing Theory course required us to build a queuing models simulator
 in Python. The repo is at
 [github.com/0xSA7/Queuepy](https://github.com/0xSA7/Queuepy). This post

@@ -1,24 +1,25 @@
-/* ========== Kanagawa Lotus (Light) — Default ========== */
+/* ========== Solarized Light — Default ========== */
 :root {
-  /* Backgrounds — أغمق درجة */
-  --bg: #C8C2A0;          /* main background (darker) */
-  --bg-soft: #E8E0B5;     /* content background (darker) */
-  --bg-elevated: #DBD3A5; /* lighter blocks (darker) */
+  /* Backgrounds (Solarized base tones) */
+  --bg: #EEE8D5;        /* base2 - main background */
+  --bg-soft: #FDF6E3;   /* base3 - content background */
+  --bg-elevated: #F5EFD9; /* between base2/base3 */
 
   /* Foregrounds */
-  --fg: #3A3A4A;          /* default text (darker ink) */
-  --muted: #5C5A50;       /* muted text (darker) */
-  --muted-2: #4A4940;     /* darker muted */
+  --fg: #586E75;        /* base01 - default text */
+  --muted: #93A1A1;     /* base1 - muted text */
+  --muted-2: #839496;   /* base0 - darker muted */
 
   /* Borders & lines */
-  --line: #B5B090;        /* borders (darker) */
+  --line: #D6CFB4;      /* darker shade of base2 */
 
-  /* Accents */
-  --accent: #4D699B;      /* lotusBlue4 */
-  --accent-2: #624C83;    /* lotusViolet4 */
-  --accent-3: #6F894E;    /* lotusGreen */
-  --warning: #E98A00;     /* lotusOrange2 */
-  --highlight: #DE9800;   /* lotusYellow3 */
+  /* Accents (Solarized accent colors) */
+  --accent: #268BD2;    /* blue - links / functions */
+  --accent-2: #6C71C4;  /* violet - keywords */
+  --accent-3: #859900;  /* green - success / strings */
+  --warning: #CB4B16;   /* orange - warnings */
+  --highlight: #B58900; /* yellow - highlights */
+  --danger: #DC322F;    /* red - errors */
 
   --max-w: 640px;
 }
