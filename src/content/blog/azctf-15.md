@@ -50,13 +50,13 @@ we had fewer authors in those areas, not because they matter less.
 
 Each challenge followed the same structure:
 
-```
-Cryptography/What is my type/
-├── challenge.c            # source
-├── challenge              # compiled binary
-├── README.md              # description + hints
-├── solution.py            # optional solution script
-└── temp.txt               # optional notes
+```mermaid
+flowchart TD
+    ROOT["Cryptography/What is my type/"] --> SRC["challenge.c<br/>(source)"]
+    ROOT --> BIN["challenge<br/>(compiled binary)"]
+    ROOT --> README["README.md<br/>(description + hints)"]
+    ROOT --> SOL["solution.py<br/>(optional solution script)"]
+    ROOT --> TMP["temp.txt<br/>(optional notes)"]
 ```
 
 The README inside each challenge folder is the contract with the

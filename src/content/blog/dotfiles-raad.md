@@ -1,27 +1,27 @@
 ---
 title: "My NixOS dotfiles: modular config, secure boot, and a portable home-manager"
-description: "How I structure my NixOS dotfiles for the laptop raad: dual-channel flakes, lanzaboote secure boot, kernel hardening, and a home-manager setup I reuse on Ubuntu."
-pubDate: 2026-07-26
+description: "How I structure my NixOS dotfiles for the laptop raad, including dual-channel flakes, lanzaboote secure boot, kernel hardening, and a home-manager trick that lets me reuse the same modules on Ubuntu."
+pubDate: 2026-10-25
 tags: ["nixos", "dotfiles", "security", "linux"]
 draft: false
-readTime: "10 min read"
+readTime: "6 min read"
 repo: "https://github.com/0xSA7/dotfiles"
 ---
 
 My laptop is called `raad` (رعد in Arabic). It runs NixOS, configured
-through a single flake at
+through a single flake that lives at
 [github.com/0xSA7/dotfiles](https://github.com/0xSA7/dotfiles). This
-post covers how that flake is structured, why I picked NixOS in the
-first place, and a small trick that lets me reuse the same modules on
-Ubuntu when I need to test snapcraft builds.
+post walks through the architecture of that flake, why I picked NixOS
+in the first place, and a small trick that lets me reuse the same
+modules on Ubuntu when I need to test snapcraft builds.
 
 I chose NixOS for three reasons: declarative configuration,
-reproducibility, and rollback. Once the system is described in Nix, I
-can rebuild it from a fresh install with one command. If an upgrade
-breaks something, I reboot into the previous generation from the boot
-menu and the system is exactly as it was. I'm a security engineer who
-tweaks kernel params, secure boot, and systemd services on a weekly
-basis, and I wouldn't work without that safety net.
+reproducibility, and rollback. Once the system is described in Nix,
+I can rebuild it from a fresh install with one command. If an upgrade
+breaks something, I reboot into the previous generation from the
+GRUB menu and the system is exactly as it was. For a security engineer
+who tweaks kernel params, secure boot, and systemd services on a
+weekly basis, that safety net is non-negotiable.
 
 ## The flake architecture
 
@@ -72,48 +72,53 @@ The whole system is defined in `flake.nix`:
 }
 ```
 
-**Dual-channel inputs.** The system tracks `nixos-26.05` (stable) by
-default, with `nixos-unstable` as a secondary input. `unstablePkgs` is
-built in the `let` binding and passed through `specialArgs`, so any
-module can take a package from unstable by writing `unstablePkgs.foo`
-instead of `pkgs.foo`. That lets me run a bleeding-edge version of one
-tool without moving the rest of the system to unstable.
+Two things are worth pointing out.
 
-**`inputs.nixpkgs.follows = "nixpkgs"`** on each dependent flake
-(home-manager, lanzaboote). Without it, each one pulls its own copy of
-nixpkgs and the closure grows by hundreds of megabytes. `follows` pins
-them all to the same nixpkgs revision, which keeps the store smaller
-and evaluation faster.
+First, **dual-channel inputs**. The system tracks `nixos-26.05`
+(stable) as the default and `nixos-unstable` as a secondary input.
+`unstablePkgs` is constructed in the `let` binding and threaded
+through `specialArgs` so that any module can pull a package from
+unstable by referring to `unstablePkgs.foo` instead of `pkgs.foo`.
+This lets me run a bleeding-edge version of one tool without dragging
+the rest of the system onto unstable.
+
+Second, **`inputs.nixpkgs.follows = "nixpkgs"`** on every dependent
+flake (home-manager, lanzaboote). Without that, each dependent would
+pull its own copy of nixpkgs, and the closure would balloon by
+hundreds of megabytes. The `follows` directive pins them to the same
+nixpkgs revision, which keeps the store lean and the eval fast.
 
 ## The modules/hosts split
 
-The repo has two top-level directories:
+The repo is split into two top-level directories:
 
-```
-dotfiles/
-├── flake.nix
-├── hosts/
-│   └── raad/
-│       ├── configuration.nix
-│       └── hardware-configuration.nix
-└── modules/
-    ├── core.nix
-    ├── home.nix
-    ├── security.nix
-    ├── gnome.nix
-    ├── hyperland.nix     # experimental
-    ├── kitty.nix
-    ├── neovim.nix
-    ├── tmux.nix
-    ├── zsh.nix
-    ├── virtualization.nix
-    └── nvim/             # Lua config
+```mermaid
+flowchart TD
+    ROOT["dotfiles/"] --> FLAKE["flake.nix"]
+    ROOT --> HOSTS["hosts/"]
+    ROOT --> MODULES["modules/"]
+
+    HOSTS --> RAAD["raad/"]
+    RAAD --> RAAD_CONFIG["configuration.nix"]
+    RAAD --> RAAD_HW["hardware-configuration.nix"]
+
+    MODULES --> CORE["core.nix"]
+    MODULES --> HOME["home.nix"]
+    MODULES --> SEC["security.nix"]
+    MODULES --> GNOME["gnome.nix"]
+    MODULES --> HYP["hyperland.nix<br/>(experimental)"]
+    MODULES --> KITTY["kitty.nix"]
+    MODULES --> NEOVIM["neovim.nix"]
+    MODULES --> TMUX["tmux.nix"]
+    MODULES --> ZSH["zsh.nix"]
+    MODULES --> VIRT["virtualization.nix"]
+    MODULES --> NVIM["nvim/<br/>(Lua config)"]
 ```
 
-`hosts/raad/` holds the host-specific parts: hostname, NVIDIA bus IDs,
-secure boot paths, and the hardware scan. Everything else lives under
-`modules/`. The host imports the modules it needs and adds its own
-settings on top:
+`hosts/raad/` holds the host-specific bits: hostname, NVIDIA bus IDs,
+secure boot paths, hardware scan. Everything else lives under
+`modules/`. The host imports the modules it needs and adds the
+host-specific glue on top:
 
 ```nix
 # hosts/raad/configuration.nix
@@ -129,14 +134,15 @@ settings on top:
 }
 ```
 
-Nothing in `modules/` refers to `raad` by name, so a second host would
-just need a new folder under `hosts/` that imports the modules it wants
-and overrides the host-specific values. I haven't added a second host
-yet, but the split keeps the cost of doing so low.
+The split paid off the moment I needed to add a second host. Nothing
+in `modules/` references `raad` by name. A new host just drops a
+new folder under `hosts/`, imports the modules it wants, and overrides
+the host-specific values. I have not added a second host yet, but the
+cost of doing so is now bounded.
 
 ## Security: kernel hardening and secure boot
 
-`modules/security.nix` is the part tied most closely to my work. It
+`modules/security.nix` is the part that is specific to my work. It
 sets the kernel parameters I want on any machine I do security work on:
 
 ```nix
@@ -153,23 +159,24 @@ sets the kernel parameters I want on any machine I do security work on:
 }
 ```
 
-What each parameter does:
+Each parameter closes a specific attack surface:
 
-- `slab_nomerge` keeps slab caches separate, which makes heap spraying
-  harder and exploitation less reliable.
-- `slub_debug=FZ` turns on slab sanity checks (`F`) and red zoning
-  (`Z`), which catch more heap corruption at runtime.
-- `page_alloc.shuffle=1` randomizes the page allocator's free lists,
-  which makes the physical page layout harder to predict.
-- `vsyscall=none` disables the legacy vsyscall page, which has long
-  been a source of ROP gadgets.
+- `slab_nomerge` keeps slab caches separate, which makes heap
+  spraying harder and makes exploitation less reliable.
+- `slub_debug=FZ` enables freelist poisoning detection (`F`) and
+  red zoning (`Z`), which catches more heap corruption bugs at
+  runtime.
+- `page_alloc.shuffle=1` randomizes the page allocator, which
+  makes physical-to-virtual page prediction attacks harder.
+- `vsyscall=none` disables the legacy vsyscall page, which has
+  been a known ROP gadget source for years.
 
-The host also enables
+On top of that, the host enables
 [lanzaboote](https://github.com/nix-community/lanzaboote) for
 [UEFI Secure Boot](https://learn.microsoft.com/windows-hardware/design/device-experiences/oem-secure-boot).
-Lanzaboote signs Unified Kernel Images (UKIs) with a key enrolled in
-the firmware, so the boot chain can be verified from the firmware
-through to the kernel command line:
+Lanzaboote signs UKIs (Unified Kernel Images) with a key enrolled in
+the firmware, so the boot chain is verifiable from the firmware all
+the way to the kernel command line:
 
 ```nix
 boot.loader.grub.enable = lib.mkForce false;
@@ -180,12 +187,13 @@ boot.lanzaboote = {
 };
 ```
 
-The `mkForce false` on the legacy bootloaders is needed because a
-default NixOS install pulls in `systemd-boot`, and lanzaboote has to
-replace it, not run beside it.
+The `mkForce false` on the legacy bootloaders is necessary because
+the default NixOS install pulls in `systemd-boot`, and lanzaboote
+needs to replace it rather than coexist with it.
 
-The same file has a template for a sandboxed systemd service, which I
-copy whenever I need to run something in a strict sandbox:
+There is also a template for a sandboxed systemd service in the same
+file. The pattern is what I copy-paste whenever I need to run
+something in a strict sandbox:
 
 ```nix
 systemd.services.isolated-vault = {
@@ -204,17 +212,16 @@ systemd.services.isolated-vault = {
 };
 ```
 
-`MemoryDenyWriteExecute = true` is the setting people forget most
-often. It blocks memory mappings that are both writable and executable,
-which makes JIT spray and shellcode injection into JIT regions much
-harder. Anything that needs runtime code generation, such as V8 or the
-JVM, will usually refuse to start under it. That's what I want when
-running untrusted code.
+`MemoryDenyWriteExecute = true` is the one most people forget. It
+blocks `mmap` with `PROT_WRITE | PROT_EXEC`, which kills JIT spray
+and shellcode-in-jitregion attacks dead. Anything that needs a JIT
+(CLR, V8, JVM) will refuse to start under this setting, which is a
+feature, not a bug, when you are running untrusted code.
 
 ## Hardware: NVIDIA Optimus
 
-`raad` has Intel integrated graphics and an NVIDIA dGPU, and I run them
-in sync mode:
+`raad` is a laptop with Intel integrated graphics and an NVIDIA
+dGPU. I run them in sync mode:
 
 ```nix
 hardware.nvidia = {
@@ -230,15 +237,16 @@ hardware.nvidia = {
 };
 ```
 
-I picked `sync.enable = true` over PRIME offload for two reasons. Sync
-mode is more predictable: every window renders on the dGPU, so I don't
-have to remember to mark apps as NVIDIA-rendered. And the open-source
-NVIDIA driver (`open = true`) doesn't support my GPU generation yet, so
-I'm on the proprietary driver for now, where PRIME offload has
-historically been flakier.
+I picked `sync.enable = true` rather than PRIME offload for two
+reasons. First, sync mode is more predictable: every window uses the
+dGPU, so I do not have to remember to mark specific apps as
+NVIDIA-rendered. Second, the open-source NVIDIA driver (`open = true`)
+does not yet support my GPU generation, so I am on the proprietary
+blob for now. PRIME offload has historically been flakier with the
+proprietary driver.
 
-The kernel params in `hosts/raad/configuration.nix` are tuned for this
-setup:
+The kernel params in `hosts/raad/configuration.nix` are tuned for
+this setup:
 
 ```nix
 boot.kernelParams = [
@@ -250,16 +258,16 @@ boot.kernelParams = [
 ];
 ```
 
-`NVreg_PreserveVideoMemoryAllocations=1` is needed to get through
-suspend and resume without the GPU falling off the bus. The NVMe and
-ASPM params turn off power-saving states. I copied them from a Phoronix
-article a year ago and haven't revisited them since.
+`NVreg_PreserveVideoMemoryAllocations=1` is necessary to survive
+suspend/resume without the GPU falling off the bus. The NVMe and
+ASPM params are power-management tweaks I copied from a Phoronix
+article a year ago and have not revisited since.
 
 ## The portable home-manager trick
 
-I also do security work on Ubuntu VMs, mostly because snapcraft builds
-aren't supported on NixOS. I still want the same shell, terminal,
-editor, and multiplexer as on `raad`, so I added
+I do security work on Ubuntu VMs as well, mostly because snapcraft
+builds are not supported on NixOS. I still want the same shell,
+terminal, editor, and multiplexer as on `raad`, so I added
 `modules/ubuntu-dev-home.nix`:
 
 ```nix
@@ -284,28 +292,32 @@ editor, and multiplexer as on `raad`, so I added
 }
 ```
 
-It imports the same `kitty.nix`, `neovim.nix`, `tmux.nix`, and
-`zsh.nix` that `raad` uses. On Ubuntu I install home-manager in
-standalone mode, point it at this module, and run
-`home-manager switch`. My kitty config, neovim keybindings, zsh
-aliases, and tmux setup arrive exactly as they are on `raad`.
+This module imports the exact same `kitty.nix`, `neovim.nix`,
+`tmux.nix`, and `zsh.nix` that `raad` uses. On Ubuntu I install
+home-manager in standalone mode, point it at this module, and run
+`home-manager switch`. My kitty config, my neovim keybindings, my
+zsh aliases, and my tmux setup land on the Ubuntu machine exactly as
+they are on `raad`.
 
-This works because none of those four modules refers to anything
-NixOS-specific. They're plain home-manager modules, so they behave the
-same whether a NixOS module pulls them in (on `raad`) or standalone
-home-manager does (on Ubuntu).
+The trick is that nothing inside `modules/kitty.nix`,
+`modules/neovim.nix`, `modules/tmux.nix`, or `modules/zsh.nix`
+references anything NixOS-specific. They are pure home-manager
+modules, so they work the same whether they are pulled in by a
+NixOS module (on `raad`) or by standalone home-manager (on Ubuntu).
 
-There's a trade-off. On Ubuntu I don't get the kernel hardening, the
-secure boot chain, or the systemd sandboxing, because those need
-system-level configuration and Nix doesn't manage the system there. The
-portable modules cover the user-level dev environment only. For
-anything that touches `/etc`, I'm back on apt and `systemctl edit`.
+The trade-off is real, though. On Ubuntu I do not get the kernel
+hardening, the secure boot chain, or the systemd sandboxing. Those
+require system-level configuration, and on Ubuntu the system is not
+managed by Nix. The portable modules cover the user-level dev
+environment only. For anything that touches `/etc`, I am back on
+apt and `systemctl edit`.
 
 ## Auto-commits
 
-The repo has an auto-commit entry dated 2026-06-27, pushed by a small
-shell utility I wrote called
-[auto-git](https://github.com/0xSA7/auto-git).It stages and commits dotfiles on a schedule so I do not lose changes
+The repo has an auto-commit entry dated 2026-06-27 that was pushed
+by a small shell utility I wrote called
+[auto-git](https://0xsa7.github.io/0xSA7/blog/auto-git-shell-script-commit-laziness/).
+It stages and commits dotfiles on a schedule so I do not lose changes
 between real commits. I have written about it separately, but the
 short version is: every dotfiles repo should have one, because the
 alternative is finding out three weeks later that the alias you added
@@ -313,19 +325,24 @@ never made it to git.
 
 ## What I took from it
 
-1. **The value of NixOS is rollback.** Declarative config is nice, but
-   you need it most when an upgrade breaks secure boot at 2 AM. The
-   boot menu still lists the previous generation, and that has saved me
-   twice.
+Three things stayed with me.
 
-2. **The modules/hosts split pays off even with one host.** It lets me
-   test changes on a VM with a stripped-down config without touching
-   the real host.
+First, the value of NixOS is rollback, not declarativity. Declarative
+config is nice, but the moment you actually need it is when an
+upgrade breaks secure boot at 2 AM. The fact that GRUB still lists
+the previous generation as a boot entry has saved me twice.
 
-3. **System config and user config are separate problems.** NixOS is
-   the right tool for the first. Standalone home-manager is a good
-   answer to the second, even on non-NixOS machines. Splitting them
-   lets each tool do what it's good at.
+Second, the modules/hosts split is not about future-proofing for
+"multiple hosts someday". It is about being able to test changes
+on a VM with a stripped-down config without touching the real host.
+Even with one host, the split is worth it.
 
-The repo is on [GitHub](https://github.com/0xSA7/dotfiles). The history
-is small enough to read in one sitting.
+Third, the portable home-manager trick reframed how I think about
+dotfiles. The system-level config and the user-level config are two
+different problems. NixOS is the right answer to the first.
+home-manager, run standalone, is a perfectly good answer to the
+second, even on non-NixOS machines. Splitting them lets each tool do
+what it is good at.
+
+The repo is on [GitHub](https://github.com/0xSA7/dotfiles). The
+history is small enough to read in one sitting.

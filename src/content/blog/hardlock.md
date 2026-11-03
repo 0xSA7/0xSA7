@@ -24,26 +24,35 @@ The PYNQ-Z2 has two halves: the Processing System (PS), which is
 the ARM Cortex-A9, and the Programmable Logic (PL), which is the
 FPGA fabric. HardLock uses both.
 
-```
-+-----------------------------+   +-----------------------------+
-|         PS (ARM A9)         |   |        PL (FPGA)            |
-|-----------------------------|   |-----------------------------|
-| Secure FSBL / Boot ROM      |   | PUF Core (SRAM sampling)   |
-| Fuzzy Extractor             |<->| Tamper Monitor (GPIO/PMOD)  |
-| Key Derivation (HKDF)       |   | Crypto Accelerators (AES)   |
-| Secure Update Manager       |   | AXI Interconnect            |
-| Attestation Service         |   +-----------------------------+
-+-----------------------------+
-              |
-              v
-+-----------------------------+
-|       QSPI Flash            |
-|-----------------------------|
-| 0x0000  Boot metadata       |
-| 0x1000  Bank A (firmware)  |
-| 0x80000 Bank B (firmware)  |
-| ...     Helper data, audit |
-+-----------------------------+
+```mermaid
+flowchart LR
+    subgraph PS["PS (ARM A9)"]
+        direction TB
+        BOOT["Secure FSBL / Boot ROM"]
+        FUZZY["Fuzzy Extractor"]
+        HKDF["Key Derivation (HKDF)"]
+        UPDATE["Secure Update Manager"]
+        ATTEST["Attestation Service"]
+    end
+
+    subgraph PL["PL (FPGA)"]
+        direction TB
+        PUF["PUF Core<br/>(SRAM sampling)"]
+        TAMPER["Tamper Monitor<br/>(GPIO/PMOD)"]
+        AES["Crypto Accelerators<br/>(AES)"]
+        AXI["AXI Interconnect"]
+    end
+
+    subgraph FLASH["QSPI Flash"]
+        direction TB
+        META["0x0000 Boot metadata"]
+        BANKA["0x1000 Bank A"]
+        BANKB["0x80000 Bank B"]
+        HELPER["Helper data, audit"]
+    end
+
+    PS <-. AXI .-> PL
+    PS --> FLASH
 ```
 
 The PL is planned to hold the hardware security primitives: the
@@ -62,40 +71,21 @@ in a separate secure region.
 The boot chain is the core of the design. Every step has to be
 verified before the next step runs.
 
-```
-Power-on
-  |
-  v
-Boot ROM (immutable, in bitstream)
-  |  reads raw PUF bits from SRAM via AXI
-  v
-Fuzzy Extractor
-  |  raw PUF bits + helper data -> K_root (volatile)
-  v
-HKDF-SHA256
-  |  K_root -> K_boot, K_attest, K_update
-  v
-Read firmware manifest from active bank
-  |  manifest = {version, hash, signature, iv, flags}
-  v
-Anti-rollback check
-  |  manifest.version >= stored_version ?
-  v
-Ed25519 signature verification
-  |  verify manifest.signature with vendor_pubkey
-  v
-AES-128-GCM decryption
-  |  decrypt firmware image with K_boot
-  v
-Integrity check (SHA-256 + GCM tag)
-  |
-  v
-Copy to RAM, jump to entry point
-  |
-  v
-Health window (configurable interval)
-  |  if stable: commit stored_version, mark bank active
-  |  if unstable: roll back to previous bank
+```mermaid
+flowchart TD
+    PWR["Power-on"] --> BOOT["Boot ROM<br/>(immutable, in bitstream)"]
+    BOOT -->|"reads raw PUF bits from SRAM via AXI"| FUZZY["Fuzzy Extractor"]
+    FUZZY -->|"raw PUF bits + helper data"| KROOT["K_root (volatile)"]
+    KROOT --> HKDF["HKDF-SHA256"]
+    HKDF -->|"K_root -> K_boot, K_attest, K_update"| MANIFEST["Read firmware manifest<br/>from active bank"]
+    MANIFEST -->|"manifest = {version, hash, signature, iv, flags}"| ROLL["Anti-rollback check"]
+    ROLL -->|"manifest.version >= stored_version ?"| SIG["Ed25519 signature verification"]
+    SIG -->|"verify manifest.signature with vendor_pubkey"| AES["AES-128-GCM decryption"]
+    AES -->|"decrypt firmware image with K_boot"| INTEG["Integrity check<br/>(SHA-256 + GCM tag)"]
+    INTEG --> COPY["Copy to RAM, jump to entry point"]
+    COPY --> HEALTH["Health window<br/>(configurable interval)"]
+    HEALTH -->|"if stable"| COMMIT["commit stored_version,<br/>mark bank active"]
+    HEALTH -->|"if unstable"| ROLLBACK["roll back to previous bank"]
 ```
 
 The Boot ROM is intended to be kept under 2KB to minimize attack
@@ -121,17 +111,13 @@ go in, along with helper data stored in flash, and a stable
 256-bit key comes out. The helper data would be generated during
 provisioning and would not leak the key.
 
-```
-Raw PUF bits R (noisy)  +  Helper data W (from flash)
-              |
-              v
-         BCH / Reed-Muller decoder
-              |
-              v
-         Stable key K (256-bit)
-              |
-              v
-         HKDF-SHA256 -> K_root
+```mermaid
+flowchart LR
+    RAW["Raw PUF bits R<br/>(noisy)"] --> DECODER
+    HELPER["Helper data W<br/>(from flash)"] --> DECODER["BCH / Reed-Muller decoder"]
+    DECODER --> STABLE["Stable key K<br/>(256-bit)"]
+    STABLE --> HKDF["HKDF-SHA256"]
+    HKDF --> KROOT["K_root"]
 ```
 
 The evaluation target is a Bit Error Rate (BER) below 10% after
@@ -144,12 +130,12 @@ uniqueness across chips.
 K_root is too valuable to use directly. HKDF-SHA256 is planned to
 derive three subkeys with distinct info strings:
 
-```
-K_root (volatile, from PUF)
-  |
-  +-- K_boot    (firmware decryption, AES-GCM)
-  +-- K_attest  (remote attestation, HMAC)
-  +-- K_update  (signed update verification)
+```mermaid
+flowchart TD
+    KROOT["K_root<br/>(volatile, from PUF)"]
+    KROOT --> KBOOT["K_boot<br/>(firmware decryption, AES-GCM)"]
+    KROOT --> KATTEST["K_attest<br/>(remote attestation, HMAC)"]
+    KROOT --> KUPDATE["K_update<br/>(signed update verification)"]
 ```
 
 Compartmentalization matters. If a glitching attack extracts

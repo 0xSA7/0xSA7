@@ -547,3 +547,124 @@ main {
     font-size: 0.68rem;
   }
 }
+
+/* ========== Mermaid diagrams ========== */
+.mermaid-wrapper {
+  position: relative;
+  background: var(--bg-soft);
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  margin: 1.5rem 0;
+  overflow: hidden;
+}
+
+.mermaid-container {
+  width: 100%;
+  cursor: grab;
+  overflow: auto;
+  position: relative;
+  text-align: center;
+  background: var(--bg-soft);
+  padding: 1rem;
+}
+
+.mermaid-container:active { cursor: grabbing; }
+
+.mermaid-container svg,
+.mermaid-container pre.mermaid svg,
+pre.mermaid svg {
+  width: 100% !important;
+  max-width: 100% !important;
+  height: auto !important;
+  display: inline-block !important;
+}
+
+.mermaid-container pre.mermaid {
+  background: transparent !important;
+  text-align: center;
+  padding: 0 !important;
+  margin: 0 !important;
+  border: none !important;
+  overflow: visible !important;
+}
+
+.mermaid-container pre.mermaid > svg {
+  margin: 0 auto !important;
+}
+
+.mermaid-controls {
+  position: absolute;
+  top: 0.5rem;
+  right: 0.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  z-index: 10;
+}
+
+.mermaid-btn {
+  background: var(--bg);
+  border: 1px solid var(--line);
+  color: var(--fg);
+  width: 28px;
+  height: 28px;
+  border-radius: 3px;
+  cursor: pointer;
+  font-size: 14px;
+  font-family: 'JetBrains Mono', monospace;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.15s;
+}
+
+.mermaid-btn:hover {
+  background: var(--bg-elevated);
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+:root[data-theme='dark'] .mermaid-wrapper {
+  background: var(--bg-soft);
+  border-color: var(--line);
+}
+
+.mermaid .node rect, .mermaid .node polygon {
+  fill: var(--bg-soft) !important;
+  stroke: var(--accent) !important;
+  stroke-width: 1.5px !important;
+}
+
+.mermaid .nodeLabel {
+  color: var(--fg) !important;
+  font-family: 'JetBrains Mono', monospace !important;
+}
+
+.mermaid .edgeLabel {
+  background-color: var(--bg-soft) !important;
+  color: var(--fg) !important;
+  font-family: 'JetBrains Mono', monospace !important;
+}
+
+.mermaid .cluster rect {
+  fill: var(--bg) !important;
+  stroke: var(--line) !important;
+  stroke-width: 1.5px !important;
+}
+
+.mermaid .cluster text {
+  color: var(--muted) !important;
+  font-family: 'JetBrains Mono', monospace !important;
+}
+
+.mermaid .edgePath .path {
+  stroke: var(--muted-2) !important;
+  stroke-width: 1.5px !important;
+}
+
+.mermaid .arrowheadPath { fill: var(--muted-2) !important; }
+
+@media (max-width: 600px) {
+  .mermaid-container { min-height: 150px; max-height: 50vh; }
+  .mermaid-btn { width: 24px; height: 24px; font-size: 12px; }
+}
