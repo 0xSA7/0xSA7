@@ -30,7 +30,7 @@ for old in "${!MAPPING[@]}"; do
       mv "$old_path" "$new_path"
       echo "✓ $old.md → $new.md"
     else
-      echo "— $old.md (already correct)"
+      echo "  $old.md (already correct)"
     fi
   else
     echo "⚠ $old.md not found (skipping)"

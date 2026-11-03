@@ -74,7 +74,7 @@ repo: "https://github.com/owner/repo"          # optional
 ```
 
 3. Run `npm run build` to verify
-4. Commit and push to the `website` branch — GitHub Actions will deploy
+4. Commit and push to the `website` branch   GitHub Actions will deploy
 
 ## Deployment
 
